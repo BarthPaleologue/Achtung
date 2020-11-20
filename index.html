@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ACHTUNG DIE KURVE ULTIMATE</title>
+    <meta name="description" content="Achtung Die Kurve's final form." />
+    <link rel="stylesheet" href="style.min.css" />
+</head>
+
+<body>
+    <section id="Startmenu">
+        <h1>Achtung Die Kurve Ultimate<sub>v1.52</sub></h1>
+        <div id="playerSlection">
+            <div class="player-container" id="fred" alt="red" data-selected="false">
+                <p class="name">Fred</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+
+            </div>
+            <div class="player-container" id="greenlee" alt="green" data-selected="false">
+                <p class="name">Greenlee</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+
+            </div>
+            <div class="player-container" id="willem" alt="#FFA500" data-selected="false">
+                <p class="name">Willem</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="pinkney" alt="purple" data-selected="false">
+                <p class="name">Pinkney</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="bluebell" alt="cyan" data-selected="false">
+                <p class="name">Bluebell</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="claude" alt="yellow" data-selected="false">
+                <p class="name">Claude</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="greydon" alt="grey" data-selected="false">
+                <p class="name">Greydon</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="philippe" alt="#07420c" data-selected="false">
+                <p class="name">Philippe</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="hubert" alt="blue" data-selected="false">
+                <p class="name">Hubert</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="brownie" alt="#964B00" data-selected="false">
+                <p class="name">Brownie</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="deepurple" alt="blueviolet" data-selected="false">
+                <p class="name">Deepurple</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="pinkey" alt="deeppink" data-selected="false">
+                <p class="name">Pinkey</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="aquamarin" alt="aquamarine" data-selected="false">
+                <p class="name">Aquamarin</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="teal" alt="teal" data-selected="false">
+                <p class="name">Teal</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+            <div class="player-container" id="coralia" alt="coral" data-selected="false">
+                <p class="name">Coralia</p>
+                <p class="keyRight">Touche 2</p>
+                <p class="keyLeft">Touche 1</p>
+            </div>
+        </div>
+        <p id="Go">Achtung !</p>
+        <div id="sliders">
+            <p>Speed</p>
+            <div class="slider" id="speedSlider">
+                <div id="speedHandle" class="ui-slider-handle"></div>
+            </div>
+            <p>Maniability</p>
+            <div class="slider" id="maniaSlider">
+                <div id="maniaHandle" class="ui-slider-handle"></div>
+            </div>
+            <p>Fatness</p>
+            <div class="slider" id="fatSlider">
+                <div id="fatHandle" class="ui-slider-handle"></div>
+            </div>
+            <p>Les p'tits trous</p>
+            <div class="slider" id="trouSlider">
+                <div id="trouHandle" class="ui-slider-handle"></div>
+            </div>
+            <p>Bonus Power</p>
+            <div class="slider" id="bonusSlider">
+                <div id="bonusHandle" class="ui-slider-handle"></div>
+            </div>
+            <p>Bonus Frequency</p>
+            <div class="slider" id="bonusFreqSlider">
+                <div id="bonusFreqHandle" class="ui-slider-handle"></div>
+            </div>
+            <p>Bonus Duration</p>
+            <div class="slider" id="bonusDurationSlider">
+                <div id="bonusDurationHandle" class="ui-slider-handle"></div>
+            </div>
+            <br/>
+            <label for="objects" id="objectsLabel">Bonuses</label><input name="objects" id="objects" type="checkbox" checked>
+
+            <div id="object-selector">
+                <img src="bonus/fasterSelf.png" id="fasterSelf" data-selected="true" />
+                <img src="bonus/fasterElse.png" id="fasterElse" data-selected="true" />
+                <img src="bonus/fatter.png" id="fatter" data-selected="true" />
+                <img src="bonus/slimmer.png" id="slimmer" data-selected="true" />
+                <img src="bonus/invincible.png" id="invincible" data-selected="true" />
+                <img src="bonus/random.png" id="random" data-selected="true" />
+                <img src="bonus/addBonus.png" id="addBonus" data-selected="true" />
+                <img src="bonus/invert.png" id="invert" data-selected="true" />
+                <img src="bonus/slowerElse.png" id="slowerElse" data-selected="true" />
+                <img src="bonus/slowerSelf.png" id="slowerSelf" data-selected="true" />
+                <img src="bonus/snakeSelf.png" id="snakeSelf" data-selected="true" />
+                <img src="bonus/snakeElse.png" id="snakeElse" data-selected="true" />
+                <img src="bonus/wallSelf.png" id="wallSelf" data-selected="true" />
+                <img src="bonus/walls.png" id="walls" data-selected="true" />
+                <img src="bonus/colorBlind.png" id="colorBlind" data-selected="true" />
+                <img src="bonus/changeBg.png" id="changeBg" data-selected="true" />
+            </div>
+            <p id="randomize">Randomize</p>
+        </div>
+    </section>
+    <div id="canvas-container">
+        <div id="victoryScreen">
+            <p id="victor"></p>
+        </div>
+        <div id="bg_calc"></div>
+        <canvas id="canvas"></canvas>
+
+        <div id="score-container">
+            <h2 id="highscore"></h2>
+            <div id="score"></div>
+        </div>
+        <div id="pauseMenu">
+            <h3>Pause !</h3>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css" />
+    <script src="components/external/seedrandom.min.js"></script>
+    <script type="module" src="components/main.js"></script>
+</body>
+
+</html>
