@@ -1,57 +1,69 @@
 //@ts-ignore
 Math.seedrandom(Math.random().toString(36).substring(7)); // aléatoire procédural
 
-import { Slider } from "./external/slider";
-import { Achtung } from "./achtung";
-import { Modifiers } from "./modifiers";
-import { randomBool, getRandomInt } from "./external/tools";
+import { Slider } from "./external/slider.js";
+import { Achtung } from "./achtung.js";
+import { Modifiers } from "./modifiers.js";
+import { randomBool, getRandomInt } from "./external/tools.js";
 
 /// Selection des personnages et des touches
 
-let selectable = true;
-let setting = 0;
-let playerUI: JQuery;
-$(".player-container").on("click", function () {
-    playerUI = $(this);
-    setting = 0;
-});
+let achtung: Achtung | null;
 
-document.onkeydown = e => {
-    if (selectable && playerUI != undefined) {
-        if (setting == 0) {
-            playerUI.children(".keyLeft").html(e.key);
-            playerUI.children(".keyLeft").attr("alt", e.keyCode);
-        }
-        if (setting == 1) {
-            playerUI.children(".keyRight").html(e.key);
-            playerUI.children(".keyRight").attr("alt", e.keyCode);
-            playerUI.attr("data-selected", "true");
-            playerUI.addClass("selected")
-        }
-        if (setting >= 1) setting = 0;
-        else setting += 1;
-    }
+let settingState = 0;
+let selectedContainer: HTMLElement | undefined;
+
+// actions de la souris sur la sélection des joueurs
+for (let playerContainer of document.querySelectorAll(".player-container")) {
+    playerContainer.addEventListener("click", () => {
+        selectedContainer = <HTMLElement>playerContainer;
+        settingState = 0;
+    });
+    playerContainer.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        playerContainer.setAttribute("data-selected", "false");
+        playerContainer.classList.remove("selected");
+        playerContainer.querySelector(".keyRight")!.innerHTML = "Touche 2";
+        playerContainer.querySelector(".keyLeft")!.innerHTML = "Touche 1";
+    });
 }
 
-$(".player-container").on("contextmenu", function (e: Event) {
-    e.preventDefault();
-    $(this).attr("data-selected", "false");
-    $(this).removeClass("selected");
-    $(this).children(".keyRight").html("Touche 2");
-    $(this).children(".keyLeft").html("Touche 1");
+document.addEventListener("keydown", e => {
+    if (selectedContainer != undefined) {
+        if (settingState == 0) {
+            selectedContainer.querySelector(".keyLeft")!.innerHTML = e.key;
+            selectedContainer.querySelector(".keyLeft")!.setAttribute("alt", String(e.keyCode));
+        }
+        if (settingState == 1) {
+            selectedContainer.querySelector(".keyRight")!.innerHTML = e.key;
+            selectedContainer.querySelector(".keyRight")!.setAttribute("alt", String(e.keyCode));
+            selectedContainer.setAttribute("data-selected", "true");
+            selectedContainer.classList.add("selected");
+        }
+        if (settingState >= 1) settingState = 0;
+        else settingState += 1;
+    }
+    if (e.keyCode == 27) { // esc
+        document.getElementById("canvas-container")!.style.display = "none";
+        document.getElementById("Startmenu")!.style.display = "block";
+        achtung = null;
+    }
 });
 
-$("#object-selector img").on("click", function (e) {
-    e.preventDefault();
-    $(this).toggleClass("disabled");
-    if ($(this).attr("class") == "disabled") $(this).attr("data-selected", "false");
-    else $(this).attr("data-selected", "true");
-});
+// actions de la souris sur les bonus
 
-//@ts-ignore
-$("#objects").checkboxradio();
-$("#objects").change(() => {
-    $("#object-selector").slideToggle(200);
+for (let bonusElement of document.querySelectorAll("#object-selector img")) {
+    bonusElement.addEventListener("click", () => {
+        bonusElement.classList.toggle("disabled");
+        if (bonusElement.getAttribute("class") == "disabled") bonusElement.setAttribute("data-selected", "false");
+        else bonusElement.setAttribute("data-selected", "true");
+    });
+}
+
+document.getElementById("objects")?.addEventListener("change", () => {
+    if (document.getElementById("object-selector")!.style.height == "0px") {
+        document.getElementById("object-selector")!.style.height = "200px"
+    } else document.getElementById("object-selector")!.style.height = "0px";
 });
 
 let modifiers: Modifiers = {
@@ -66,12 +78,10 @@ let modifiers: Modifiers = {
 
 let speedSlider = new Slider("speedSlider", document.getElementById("speedSlider")!, 1, 50, 10, (val: number) => {
     modifiers.speed = val / 10;
-    //maniability = (360 / (60 * 150)) * modifiers.maniability * modifiers.speed;
 });
 
 let maniaSlider = new Slider("maniaSlider", document.getElementById("maniaSlider")!, 1, 20, 10, (val: number) => {
     modifiers.maniability = val / 10;
-    //maniability = (360 / (60 * 150)) * modifiers.maniability * modifiers.speed;
 });
 
 let fatSlider = new Slider("fatSlider", document.getElementById("fatSlider")!, 1, 50, 10, (val: number) => {
@@ -94,49 +104,36 @@ let bonusDurationSlider = new Slider("bonusDurationSlider", document.getElementB
     modifiers.bonusDuration = val / 10;
 });
 
-$("#randomize").click(e => {
-    let rd1 = getRandomInt(5, 20);
-    speedSlider.setValue(rd1);
+document.getElementById("randomize")!.addEventListener("click", () => {
+    speedSlider.setValue(getRandomInt(5, 20));
+    maniaSlider.setValue(getRandomInt(7, 15));
+    fatSlider.setValue(getRandomInt(5, 15));
+    trouSlider.setValue(getRandomInt(8, 30));
+    bonusSlider.setValue(getRandomInt(5, 15));
+    bonusFreqSlider.setValue(getRandomInt(7, 40));
+    bonusDurationSlider.setValue(getRandomInt(5, 15));
 
-    let rd2 = getRandomInt(7, 15);
-    maniaSlider.setValue(rd2);
+    for (let bonusElement of document.querySelectorAll("#object-selector img")) {
+        if (randomBool(20)) {
+            bonusElement.classList.toggle("disabled");
+            if (bonusElement.getAttribute("class") == "disabled") bonusElement.setAttribute("data-selected", "false");
+            else bonusElement.setAttribute("data-selected", "true");
+        }
+    }
 
-    let rd3 = getRandomInt(5, 15);
-    fatSlider.setValue(rd3);
-
-    let rd4 = getRandomInt(8, 30);
-    trouSlider.setValue(rd4);
-
-    let rd5 = getRandomInt(5, 15);
-    bonusSlider.setValue(rd5);
-
-    let rd6 = getRandomInt(7, 40);
-    bonusFreqSlider.setValue(rd6);
-
-    let rd7 = getRandomInt(5, 15);
-    bonusDurationSlider.setValue(rd7);
-
-    $("#object-selector img").each(function (e) {
-        if (randomBool(20)) $(this).trigger("click");
-    });
-    if ((randomBool(5) && $("#objects").is(":checked")) || (randomBool(80) && !$("#objects").is(":checked"))) $("#objects").trigger("click");
+    let areBonusEnabled = (<HTMLInputElement>document.getElementById("objects")).checked;
+    if (randomBool(5) && areBonusEnabled || (randomBool(80) && !areBonusEnabled)) (<HTMLInputElement>document.getElementById("objects")).checked = !areBonusEnabled;
 });
 
-
-document.addEventListener("fullscreenchange", () => {
-    selectable = !selectable;
-    if ($("h1").is(":visible")) new Achtung(modifiers, document.getElementById("canvas")!);
-    else $("#canvas-container").fadeOut(100, () => $("#Startmenu").fadeIn());
-});
-
-$("#Go").on("click", () => {
+document.getElementById("Go")!.addEventListener("click", () => {
     if (document.querySelectorAll(".selected").length > 1) {
         try {
-            document.getElementById("canvas-container")!.requestFullscreen();
+            document.getElementById("canvas-container")!.requestFullscreen().then(() => {
+                achtung = new Achtung(modifiers, document.getElementById("canvas")!);
+                selectedContainer = undefined;
+            });
         } catch (e) {
             alert("Votre navigateur ne supporte pas la fonction requestFullScreen. Mettez le à jour ou Goulag.\n" + e);
         }
-    } else {
-        alert("Bah alors ? Tu joues tout seul ? T'as pas d'amis Jack !")
-    }
+    } else alert("Bah alors ? Tu joues tout seul ? T'as pas d'amis Jack !");
 });

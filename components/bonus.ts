@@ -24,15 +24,13 @@ export class Bonus {
 
         document.getElementById("canvas-container")!.appendChild(this.element);
 
-        this.x = getRandom($(this.element).width()! / 2, this.bonusManager.game.canvasManager.width() - $(this.element).width()! / 2);
-        this.y = getRandom($(this.element).width()! / 2, this.bonusManager.game.canvasManager.height() - $(this.element).width()! / 2);
+        this.x = getRandom(this.element.clientWidth / 2, this.bonusManager.game.canvasManager.width() - this.element.clientWidth / 2);
+        this.y = getRandom(this.element.clientHeight / 2, this.bonusManager.game.canvasManager.height() - this.element.clientHeight / 2);
         this.activated = false;
 
-        $(this.element).css({
-            "position": "absolute",
-            "left": this.x + 3 - $(this.element).width()! / 2 + "px", //on compte les 3px de barrière
-            "top": this.y + 3 - $(this.element).width()! / 2 + "px"
-        });
+        this.element.style.position = "absolute";
+        this.element.style.left = this.x + 3 - this.element.clientWidth / 2 + "px";
+        this.element.style.top = this.y + 3 - this.element.clientHeight / 2 + "px";
     }
     activate(playerEffector: Player) {
         this.activated = true;

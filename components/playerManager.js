@@ -1,4 +1,4 @@
-import { randomBool, getRandomInt } from "./external/tools";
+import { randomBool } from "./external/tools";
 export class PlayerManager {
     constructor(game) {
         this.players = [];
@@ -11,17 +11,20 @@ export class PlayerManager {
             fatness: game.modifiers.fatness,
             holeLength: game.modifiers.holeLength
         };
-        this.maniability = (360 / 10000) * this.modifiers.maniability * this.modifiers.speed;
+        this.maniability = (360 / 8500) * this.modifiers.maniability * this.modifiers.speed;
         this.canvasManager = this.game.canvasManager;
     }
     addPlayer(player) {
         this.players.push(player);
         this.aliveCounter += 1;
         this.maxScore = (this.getPlayersNumber() - 1) * 10;
-        $("h2").html(this.maxScore + " points");
+        document.getElementById("highscore").innerHTML = this.maxScore + " points";
     }
     getPlayersNumber() {
         return this.players.length;
+    }
+    getPlayerList() {
+        return this.players;
     }
     sortPlayersByScore() {
         this.players.sort((p1, p2) => {
@@ -29,17 +32,19 @@ export class PlayerManager {
         });
     }
     refreshScore() {
+        var _a;
         document.getElementById("score").innerHTML = "";
         this.sortPlayersByScore();
         for (let player of this.players) {
-            $("#score").append(`<p id="${player.name}Score">${player.name} : ${player.score}</p>`);
+            let scoreElement = document.createElement("p");
+            scoreElement.setAttribute("id", player.name + "Score");
+            scoreElement.innerText = `${player.name} : ${player.score}`;
+            (_a = document.getElementById("score")) === null || _a === void 0 ? void 0 : _a.appendChild(scoreElement);
         }
         if (this.players[0].score >= this.maxScore && this.players[0].score - this.players[1].score >= 2 && this.aliveCounter <= 1) {
             document.getElementById("victoryScreen").style.backgroundColor = this.players[0].defaultColor;
-            $("#victor").css({
-                "line-height": $("#victoryScreen").height() + "px"
-            });
-            $("#victoryScreen").fadeIn();
+            document.getElementById("victor").style.lineHeight = window.innerHeight + "px";
+            document.getElementById("victoryScreen").style.display = "block";
             document.getElementById("victor").innerText = `${this.players[0].name} konec hry !`;
             this.game.gameOver = true;
         }
@@ -57,7 +62,7 @@ export class PlayerManager {
                 this.aliveCounter += 1;
                 // apparition d'un trou
                 if (randomBool(.5 * player.lastTrou / (70 / this.modifiers.speed)) && player.lastTrou > 70 / this.modifiers.speed) {
-                    player.trou += Math.round(getRandomInt(15, 20) * this.modifiers.holeLength * (player.width / 3) / player.speed);
+                    player.trou += Math.round(16 * this.modifiers.holeLength * (player.width / 3) / player.speed);
                     player.invincible = true;
                     player.lastTrou = 0;
                 }
@@ -71,15 +76,15 @@ export class PlayerManager {
                 // déplacement du serpent
                 player.move();
                 // Gestion des murs
-                if (player.x < player.width || player.x > this.canvasManager.width() - player.width / 2 || player.y < player.width || player.y > this.canvasManager.height() - player.width / 2) {
+                if (player.x < player.width || player.x > this.game.width - player.width / 2 || player.y < player.width || player.y > this.canvasManager.height() - player.width / 2) {
                     if (player.wallBreaker) {
                         if (player.x <= 0)
-                            player.x = this.canvasManager.width() - player.width / 2;
-                        if (player.x >= this.canvasManager.width())
+                            player.x = this.game.width - player.width / 2;
+                        if (player.x >= this.game.width)
                             player.x = player.width / 2;
                         if (player.y <= 0)
                             player.y = this.canvasManager.height() - player.width / 2;
-                        if (player.y >= this.canvasManager.height())
+                        if (player.y >= this.game.height)
                             player.y = player.width / 2;
                     }
                     else if (!player.invincible) {
@@ -96,12 +101,11 @@ export class PlayerManager {
                 }
                 if (player.invincible)
                     continue; // pas de collision ni de traces en invincibilité
-                let currentCellX = Math.floor((player.x / this.canvasManager.width()) * this.canvasManager.nbCells);
-                let currentCellY = Math.floor((player.y / this.canvasManager.height()) * this.canvasManager.nbCells);
+                let currentCellX = Math.floor((player.x / this.game.width) * this.canvasManager.nbCells);
+                let currentCellY = Math.floor((player.y / this.game.height) * this.canvasManager.nbCells);
                 let currentCell = this.canvasManager.cells[currentCellX][currentCellY];
                 player.currentCell = currentCell;
-                if (player.trou == 0) {
-                    // comportement normal (pas de trou)
+                if (player.trou == 0) { // comportement normal (pas de trou)
                     this.canvasManager.drawPlayerPath(player);
                     player.lastTrou += 1;
                 }

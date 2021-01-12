@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ACHTUNG DIE KURVE ULTIMATE</title>
-    <meta name="description" content="Achtung Die Kurve's final form." />
+    <title>Curve Fever 2010</title>
+    <meta name="description" content="Curve Fever 2010 en HTML5. La meilleure version d'Achtung en fait." />
+    <meta name="robots" content="index" />
     <link rel="stylesheet" href="style.min.css" />
 </head>
 
 <body>
     <section id="Startmenu">
-        <h1>Achtung Die Kurve Ultimate<sub>v1.52</sub></h1>
+        <h1>Achtung Die Kurve Ultimate<sub>v1.6.1</sub></h1>
         <div id="playerSlection">
             <div class="player-container" id="fred" alt="red" data-selected="false">
                 <p class="name">Fred</p>
@@ -94,37 +95,26 @@
         </div>
         <p id="Go">Achtung !</p>
         <div id="sliders">
-            <p>Speed</p>
-            <div class="slider" id="speedSlider">
-                <div id="speedHandle" class="ui-slider-handle"></div>
-            </div>
-            <p>Maniability</p>
-            <div class="slider" id="maniaSlider">
-                <div id="maniaHandle" class="ui-slider-handle"></div>
-            </div>
-            <p>Fatness</p>
-            <div class="slider" id="fatSlider">
-                <div id="fatHandle" class="ui-slider-handle"></div>
-            </div>
-            <p>Les p'tits trous</p>
-            <div class="slider" id="trouSlider">
-                <div id="trouHandle" class="ui-slider-handle"></div>
-            </div>
-            <p>Bonus Power</p>
-            <div class="slider" id="bonusSlider">
-                <div id="bonusHandle" class="ui-slider-handle"></div>
-            </div>
-            <p>Bonus Frequency</p>
-            <div class="slider" id="bonusFreqSlider">
-                <div id="bonusFreqHandle" class="ui-slider-handle"></div>
-            </div>
-            <p>Bonus Duration</p>
-            <div class="slider" id="bonusDurationSlider">
-                <div id="bonusDurationHandle" class="ui-slider-handle"></div>
-            </div>
+            <p>Vitesse</p>
+            <div class="slider" id="speedSlider"></div>
+            <p>Maniabilité</p>
+            <div class="slider" id="maniaSlider"></div>
+            <p>Largeur</p>
+            <div class="slider" id="fatSlider"></div>
+            <p>Longueur de trou</p>
+            <div class="slider" id="trouSlider"></div>
+            <p>Puissance des bonus</p>
+            <div class="slider" id="bonusSlider"></div>
+            <p>Fréquence des bonus</p>
+            <div class="slider" id="bonusFreqSlider"></div>
+            <p>Durée des bonus</p>
+            <div class="slider" id="bonusDurationSlider"></div>
             <br/>
-            <label for="objects" id="objectsLabel">Bonuses</label><input name="objects" id="objects" type="checkbox" checked>
-
+            <div class="checkboxContainer">
+                <label for="objects">Autoriser Bonus</label>
+                <input name="objects" id="objects" type="checkbox" checked>
+                <label for="objects" id="objectsLabel"></label>
+            </div>
             <div id="object-selector">
                 <img src="bonus/fasterSelf.png" id="fasterSelf" data-selected="true" />
                 <img src="bonus/fasterElse.png" id="fasterElse" data-selected="true" />
@@ -161,11 +151,8 @@
             <h3>Pause !</h3>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="jquery-ui/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css" />
-    <script src="components/external/seedrandom.min.js"></script>
-    <script type="module" src="components/main.js"></script>
+    <script src="./components/external/seedrandom.min.js"></script>
+    <script type="module" src="./components/main.js"></script>
 </body>
 
 </html>

@@ -26,7 +26,7 @@ export class CanvasManager {
     drawPlayerPath(player) {
         this.ctx.beginPath();
         this.ctx.fillStyle = player.color;
-        this.ctx.arc(player.x, player.y, player.width, 0, 6 /*.28318*/);
+        this.ctx.arc(player.x, player.y, player.width, 0, 6.28318);
         this.ctx.fill();
         player.currentCell.path.push(new Path(player.x, player.y, player.width, player.name, this.game.I));
     }

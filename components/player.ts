@@ -85,7 +85,7 @@ export class Player {
         this.keyLeft = this.iniKeyLeft;
         this.keyRight = this.iniKeyRight;
         this.width = 3.6 * this.playerManager.modifiers.fatness;
-        this.speed = 1.8 * this.playerManager.modifiers.speed;
+        this.speed = 1.5 * this.playerManager.modifiers.speed;
         this.alive = true;
         this.invincible = false;
         this.snakeMode = false;
@@ -116,15 +116,13 @@ export class Player {
         this.x += this.speed * Math.cos(this.angular);
         this.y += this.speed * Math.sin(this.angular);
 
-        $(this.head).css({
-            "left": this.x + 3 - $(this.head).width()! / 2 + "px", // le +3 c'est pour la bordure
-            "top": this.y + 3 - $(this.head).height()! / 2 + "px",
-            "transform": "scale(" + this.width * 2 / 10 + ")",
-        });
+        this.head.style.left = this.x + 3 - this.head.clientWidth / 2 + "px"; // le +3 c'est pour la bordure
+        this.head.style.top = this.y + 3 - this.head.clientHeight / 2 + "px";
+        this.head.style.transform = `scale(${this.width * 2 / 10})`;
     }
 
     intersectBonus(bonus: Bonus): boolean {
-        let limit = this.width + $(bonus.element).width()! / 2;
+        let limit = this.width + bonus.element.clientHeight / 2;
         return squaredDistance(this.x, bonus.x, this.y, bonus.y) < limit ** 2;
     }
 

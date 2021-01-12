@@ -1,8 +1,8 @@
-import { Player } from "./player";
-import { BonusManager } from "./bonusManager";
-import { getRandom } from "./external/tools";
-import { PlayerManager } from "./playerManager";
-import { CanvasManager } from "./canvasManager";
+import { Player } from "./player.js";
+import { BonusManager } from "./bonusManager.js";
+import { getRandom } from "./external/tools.js";
+import { PlayerManager } from "./playerManager.js";
+import { CanvasManager } from "./canvasManager.js";
 export class Achtung {
     constructor(modifiers, canvas) {
         this.fps = 60;
@@ -10,21 +10,20 @@ export class Achtung {
         this.interval = 0;
         this.running = true;
         this.gameOver = false;
-        $(".head").remove(); // on clear les joueurs précédents
-        $("#Startmenu, #victoryScreen").fadeOut(100, () => $("#canvas-container").fadeIn()); // disparition du menu, apparition du jeu
-        $("#pauseMenu").fadeOut(100); // disparition du menu de pause
+        document.querySelectorAll(".bonus, .head").forEach((elm) => elm.remove());
+        document.getElementById("Startmenu").hidden = true;
+        document.getElementById("pauseMenu").style.opacity = "0";
+        document.getElementById("canvas-container").style.display = "block";
         let ctx = canvas.getContext("2d");
-        ctx.canvas.width = Math.min($("#canvas-container").width(), $("#canvas-container").height());
-        ctx.canvas.height = ctx.canvas.width - 6; // les bordures pour le -6
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.canvas.width = Math.min(window.innerWidth, window.innerHeight);
+        ctx.canvas.height = ctx.canvas.width - 2 * 3; // les bordures pour le -2*3
+        ctx.globalCompositeOperation = "source-over";
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // le fond du canvas
         this.width = ctx.canvas.width;
         this.height = ctx.canvas.height;
         this.modifiers = modifiers;
-        $("#bg_calc").css({
-            width: this.width,
-            height: this.height
-        });
+        document.getElementById("bg_calc").style.width = this.width + "px";
+        document.getElementById("bg_calc").style.height = this.height + "px";
         // initialisation des subdivisions du jeu
         this.canvasManager = new CanvasManager(canvas, this);
         this.canvasManager.initCells(30);
@@ -35,32 +34,28 @@ export class Achtung {
                 let keyLeft = parseInt(element.querySelector(".keyLeft").getAttribute("alt"));
                 let keyRight = parseInt(element.querySelector(".keyRight").getAttribute("alt"));
                 let color = element.getAttribute("alt");
-                let name = $(element).children(".name").html();
+                let name = element.querySelector(".name").innerHTML;
                 this.playerManager.addPlayer(new Player(name, getRandom(this.width / 7, this.width * (6 / 7)), getRandom(this.height / 7, this.height * (6 / 7)), Math.random() * 360, color, keyLeft, keyRight, this.playerManager));
                 console.log(`${name} has been added to the game.`);
-                $("#score").append("<p id='" + name + "Score'>" + name + " : 0</p>");
+                document.getElementById("score").append(`<p id="${name}Score">${name} : 0</p>`);
             }
         });
         this.bonusManager = new BonusManager(this);
         document.querySelectorAll("#object-selector img").forEach((element) => {
-            if (element.getAttribute("data-selected") == "true" && $("#objects").is(":checked")) {
+            if (element.getAttribute("data-selected") == "true" && document.getElementById("objects").checked) {
                 this.bonusManager.addEffect(element.getAttribute("id"));
             }
         });
-        $("#score-container").width(window.innerWidth - this.canvasManager.width() - 30);
+        document.getElementById("score-container").style.width = window.innerWidth - this.canvasManager.width() - 30 + "px";
         // initialisation du clavier
         this.keyboard = {};
         window.addEventListener('keydown', e => this.keyboard[e.keyCode || e.which] = true, true);
         window.addEventListener('keyup', e => this.keyboard[e.keyCode || e.which] = false, true);
         document.onkeyup = e => {
             if (e.keyCode == 32 && this.running)
-                this.pause(), $("#pauseMenu").fadeIn();
+                this.pause(), document.getElementById("pauseMenu").style.opacity = "1";
             else if (e.keyCode == 32 && !this.running)
-                this.resume(), $("#pauseMenu").fadeOut();
-            if (e.keyCode == 27) {
-                document.exitFullscreen();
-                $("#canvas-container").fadeOut(100, () => $("#Startmenu").fadeIn());
-            }
+                this.resume(), document.getElementById("pauseMenu").style.opacity = "0";
         };
         this.nextPlay();
     }
@@ -79,7 +74,7 @@ export class Achtung {
         this.I += 1;
         this.playerManager.refreshScore();
         this.playerManager.aliveCounter = 0;
-        if (this.I % Math.round(400 / this.modifiers.bonusFrequency) == 0 && $("#objects").is(":checked"))
+        if (this.I % Math.round(400 / this.modifiers.bonusFrequency) == 0 && document.getElementById("objects").checked)
             this.bonusManager.spawnBonus(1);
         this.playerManager.updatePlayers();
         if (this.playerManager.aliveCounter <= 1) { // fin de la manche

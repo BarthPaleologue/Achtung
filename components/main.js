@@ -1,53 +1,66 @@
+var _a;
 //@ts-ignore
 Math.seedrandom(Math.random().toString(36).substring(7)); // aléatoire procédural
-import { Slider } from "./external/slider";
-import { Achtung } from "./achtung";
-import { randomBool, getRandomInt } from "./external/tools";
+import { Slider } from "./external/slider.js";
+import { Achtung } from "./achtung.js";
+import { randomBool, getRandomInt } from "./external/tools.js";
 /// Selection des personnages et des touches
-let selectable = true;
-let setting = 0;
-let playerUI;
-$(".player-container").on("click", function () {
-    playerUI = $(this);
-    setting = 0;
-});
-document.onkeydown = e => {
-    if (selectable && playerUI != undefined) {
-        if (setting == 0) {
-            playerUI.children(".keyLeft").html(e.key);
-            playerUI.children(".keyLeft").attr("alt", e.keyCode);
+let achtung;
+let settingState = 0;
+let selectedContainer;
+// actions de la souris sur la sélection des joueurs
+for (let playerContainer of document.querySelectorAll(".player-container")) {
+    playerContainer.addEventListener("click", () => {
+        selectedContainer = playerContainer;
+        settingState = 0;
+    });
+    playerContainer.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        playerContainer.setAttribute("data-selected", "false");
+        playerContainer.classList.remove("selected");
+        playerContainer.querySelector(".keyRight").innerHTML = "Touche 2";
+        playerContainer.querySelector(".keyLeft").innerHTML = "Touche 1";
+    });
+}
+document.addEventListener("keydown", e => {
+    if (selectedContainer != undefined) {
+        if (settingState == 0) {
+            selectedContainer.querySelector(".keyLeft").innerHTML = e.key;
+            selectedContainer.querySelector(".keyLeft").setAttribute("alt", String(e.keyCode));
         }
-        if (setting == 1) {
-            playerUI.children(".keyRight").html(e.key);
-            playerUI.children(".keyRight").attr("alt", e.keyCode);
-            playerUI.attr("data-selected", "true");
-            playerUI.addClass("selected");
+        if (settingState == 1) {
+            selectedContainer.querySelector(".keyRight").innerHTML = e.key;
+            selectedContainer.querySelector(".keyRight").setAttribute("alt", String(e.keyCode));
+            selectedContainer.setAttribute("data-selected", "true");
+            selectedContainer.classList.add("selected");
         }
-        if (setting >= 1)
-            setting = 0;
+        if (settingState >= 1)
+            settingState = 0;
         else
-            setting += 1;
+            settingState += 1;
     }
-};
-$(".player-container").on("contextmenu", function (e) {
-    e.preventDefault();
-    $(this).attr("data-selected", "false");
-    $(this).removeClass("selected");
-    $(this).children(".keyRight").html("Touche 2");
-    $(this).children(".keyLeft").html("Touche 1");
+    if (e.keyCode == 27) { // esc
+        document.getElementById("canvas-container").style.display = "none";
+        document.getElementById("Startmenu").style.display = "block";
+        achtung = null;
+    }
 });
-$("#object-selector img").on("click", function (e) {
-    e.preventDefault();
-    $(this).toggleClass("disabled");
-    if ($(this).attr("class") == "disabled")
-        $(this).attr("data-selected", "false");
+// actions de la souris sur les bonus
+for (let bonusElement of document.querySelectorAll("#object-selector img")) {
+    bonusElement.addEventListener("click", () => {
+        bonusElement.classList.toggle("disabled");
+        if (bonusElement.getAttribute("class") == "disabled")
+            bonusElement.setAttribute("data-selected", "false");
+        else
+            bonusElement.setAttribute("data-selected", "true");
+    });
+}
+(_a = document.getElementById("objects")) === null || _a === void 0 ? void 0 : _a.addEventListener("change", () => {
+    if (document.getElementById("object-selector").style.height == "0px") {
+        document.getElementById("object-selector").style.height = "200px";
+    }
     else
-        $(this).attr("data-selected", "true");
-});
-//@ts-ignore
-$("#objects").checkboxradio();
-$("#objects").change(() => {
-    $("#object-selector").slideToggle(200);
+        document.getElementById("object-selector").style.height = "0px";
 });
 let modifiers = {
     speed: 1,
@@ -60,11 +73,9 @@ let modifiers = {
 };
 let speedSlider = new Slider("speedSlider", document.getElementById("speedSlider"), 1, 50, 10, (val) => {
     modifiers.speed = val / 10;
-    //maniability = (360 / (60 * 150)) * modifiers.maniability * modifiers.speed;
 });
 let maniaSlider = new Slider("maniaSlider", document.getElementById("maniaSlider"), 1, 20, 10, (val) => {
     modifiers.maniability = val / 10;
-    //maniability = (360 / (60 * 150)) * modifiers.maniability * modifiers.speed;
 });
 let fatSlider = new Slider("fatSlider", document.getElementById("fatSlider"), 1, 50, 10, (val) => {
     modifiers.fatness = val / 10;
@@ -81,45 +92,39 @@ let bonusFreqSlider = new Slider("bonusFreqSlider", document.getElementById("bon
 let bonusDurationSlider = new Slider("bonusDurationSlider", document.getElementById("bonusDurationSlider"), 1, 20, 10, (val) => {
     modifiers.bonusDuration = val / 10;
 });
-$("#randomize").click(e => {
-    let rd1 = getRandomInt(5, 20);
-    speedSlider.setValue(rd1);
-    let rd2 = getRandomInt(7, 15);
-    maniaSlider.setValue(rd2);
-    let rd3 = getRandomInt(5, 15);
-    fatSlider.setValue(rd3);
-    let rd4 = getRandomInt(8, 30);
-    trouSlider.setValue(rd4);
-    let rd5 = getRandomInt(5, 15);
-    bonusSlider.setValue(rd5);
-    let rd6 = getRandomInt(7, 40);
-    bonusFreqSlider.setValue(rd6);
-    let rd7 = getRandomInt(5, 15);
-    bonusDurationSlider.setValue(rd7);
-    $("#object-selector img").each(function (e) {
-        if (randomBool(20))
-            $(this).trigger("click");
-    });
-    if ((randomBool(5) && $("#objects").is(":checked")) || (randomBool(80) && !$("#objects").is(":checked")))
-        $("#objects").trigger("click");
+document.getElementById("randomize").addEventListener("click", () => {
+    speedSlider.setValue(getRandomInt(5, 20));
+    maniaSlider.setValue(getRandomInt(7, 15));
+    fatSlider.setValue(getRandomInt(5, 15));
+    trouSlider.setValue(getRandomInt(8, 30));
+    bonusSlider.setValue(getRandomInt(5, 15));
+    bonusFreqSlider.setValue(getRandomInt(7, 40));
+    bonusDurationSlider.setValue(getRandomInt(5, 15));
+    for (let bonusElement of document.querySelectorAll("#object-selector img")) {
+        if (randomBool(20)) {
+            bonusElement.classList.toggle("disabled");
+            if (bonusElement.getAttribute("class") == "disabled")
+                bonusElement.setAttribute("data-selected", "false");
+            else
+                bonusElement.setAttribute("data-selected", "true");
+        }
+    }
+    let areBonusEnabled = document.getElementById("objects").checked;
+    if (randomBool(5) && areBonusEnabled || (randomBool(80) && !areBonusEnabled))
+        document.getElementById("objects").checked = !areBonusEnabled;
 });
-document.addEventListener("fullscreenchange", () => {
-    selectable = !selectable;
-    if ($("h1").is(":visible"))
-        new Achtung(modifiers, document.getElementById("canvas"));
-    else
-        $("#canvas-container").fadeOut(100, () => $("#Startmenu").fadeIn());
-});
-$("#Go").on("click", () => {
+document.getElementById("Go").addEventListener("click", () => {
     if (document.querySelectorAll(".selected").length > 1) {
         try {
-            document.getElementById("canvas-container").requestFullscreen();
+            document.getElementById("canvas-container").requestFullscreen().then(() => {
+                achtung = new Achtung(modifiers, document.getElementById("canvas"));
+                selectedContainer = undefined;
+            });
         }
         catch (e) {
             alert("Votre navigateur ne supporte pas la fonction requestFullScreen. Mettez le à jour ou Goulag.\n" + e);
         }
     }
-    else {
+    else
         alert("Bah alors ? Tu joues tout seul ? T'as pas d'amis Jack !");
-    }
 });
