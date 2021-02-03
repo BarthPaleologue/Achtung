@@ -4,6 +4,7 @@ import { getRandom } from "./external/tools.js";
 import { Modifiers } from "./modifiers.js";
 import { PlayerManager } from "./playerManager.js";
 import { CanvasManager } from "./canvasManager.js";
+import { bonusBaseIterationFrequency } from "./constants.js";
 
 export class Achtung {
     fps = 60;
@@ -25,6 +26,8 @@ export class Achtung {
 
     running = true;
     gameOver = false;
+
+    defaultSnakeMode: boolean = false;
 
     keyboard: { [key: number]: boolean };
 
@@ -50,7 +53,7 @@ export class Achtung {
         // initialisation des subdivisions du jeu
 
         this.canvasManager = new CanvasManager(canvas as HTMLCanvasElement, this);
-        this.canvasManager.initCells(30);
+        this.canvasManager.initCells(20);
 
         // initialisation des joueurs
 
@@ -85,8 +88,8 @@ export class Achtung {
 
         // initialisation du clavier
         this.keyboard = {};
-        window.addEventListener('keydown', e => this.keyboard[e.keyCode || e.which] = true, true);
-        window.addEventListener('keyup', e => this.keyboard[e.keyCode || e.which] = false, true);
+        window.addEventListener('keydown', e => this.keyboard[e.keyCode] = true);
+        window.addEventListener('keyup', e => this.keyboard[e.keyCode] = false);
 
         document.onkeyup = e => { // gestion de la pause avec la barre espace
             if (e.keyCode == 32 && this.running) this.pause(), document.getElementById("pauseMenu")!.style.opacity = "1";
@@ -94,6 +97,15 @@ export class Achtung {
         }
 
         this.nextPlay();
+    }
+
+    destroy() {
+        this.pause();
+        document.getElementById("victoryScreen")!.style.display = "none";
+        document.querySelectorAll(".bonus, .head").forEach((elm: Element) => elm.remove());
+        this.canvasManager.clear();
+        this.bonusManager.clear();
+        document.getElementById("bg_calc")!.style.background = "black";
     }
 
     nextPlay() {
@@ -107,9 +119,7 @@ export class Achtung {
 
         document.getElementById("bg_calc")!.style.background = "black";
 
-        for (let i = 0; i < 10; i++) {
-            this.update();
-        }
+        for (let i = 0; i < 10; i++) this.update();
 
         this.pause();
     }
@@ -120,7 +130,7 @@ export class Achtung {
 
         this.playerManager.aliveCounter = 0;
 
-        if (this.I % Math.round(400 / this.modifiers.bonusFrequency) == 0 && (<HTMLInputElement>document.getElementById("objects")).checked) this.bonusManager.spawnBonus(1);
+        if (this.I % Math.round(bonusBaseIterationFrequency / this.modifiers.bonusFrequency) == 0 && (<HTMLInputElement>document.getElementById("objects")).checked) this.bonusManager.spawnBonus(1);
 
         this.playerManager.updatePlayers();
 

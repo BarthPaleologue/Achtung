@@ -1,4 +1,5 @@
 import { randomBool } from "./external/tools";
+import { playerBaseManiability, playerBaseWidth } from "./constants";
 export class PlayerManager {
     constructor(game) {
         this.players = [];
@@ -11,7 +12,7 @@ export class PlayerManager {
             fatness: game.modifiers.fatness,
             holeLength: game.modifiers.holeLength
         };
-        this.maniability = (360 / 8500) * this.modifiers.maniability * this.modifiers.speed;
+        this.maniability = 360 * playerBaseManiability * this.modifiers.maniability * this.modifiers.speed;
         this.canvasManager = this.game.canvasManager;
     }
     addPlayer(player) {
@@ -56,13 +57,18 @@ export class PlayerManager {
         }
         this.refreshScore();
     }
+    refreshKeyboardState() {
+        for (let player of this.players) {
+            player.listenToKeyboard();
+        }
+    }
     updatePlayers() {
         for (let player of this.players) {
             if (player.alive) {
                 this.aliveCounter += 1;
                 // apparition d'un trou
                 if (randomBool(.5 * player.lastTrou / (70 / this.modifiers.speed)) && player.lastTrou > 70 / this.modifiers.speed) {
-                    player.trou += Math.round(16 * this.modifiers.holeLength * (player.width / 3) / player.speed);
+                    player.trou += Math.max(Math.round(19 * this.modifiers.holeLength * (player.width / 3) / player.speed), Math.round(18 * this.modifiers.holeLength * (playerBaseWidth * this.modifiers.fatness / 3) / player.speed));
                     player.invincible = true;
                     player.lastTrou = 0;
                 }
@@ -88,6 +94,7 @@ export class PlayerManager {
                             player.y = player.width / 2;
                     }
                     else if (!player.invincible) {
+                        console.log(`${player.name} s'est pris un mur.`);
                         player.die();
                         continue;
                     }

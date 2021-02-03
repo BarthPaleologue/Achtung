@@ -109,9 +109,9 @@ export class BonusManager {
     }
     affectBgColor(color, playerEffector, permanent) {
         if (color == "random")
-            $("#bg_calc").css({ "background": playerEffector.color });
+            document.getElementById("bg_calc").style.background = playerEffector.color;
         if (color == "original")
-            $("#bg_calc").css({ "background": "black" });
+            document.getElementById("bg_calc").style.display = "black";
         if (!permanent) {
             this.timeouts.push(setTimeout(() => this.affectBgColor("original", playerEffector, true), 10000 * this.game.modifiers.bonusDuration));
         }

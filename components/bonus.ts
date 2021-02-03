@@ -1,6 +1,7 @@
 import { Player } from "./player";
 import { getRandom } from "./external/tools";
 import { BonusManager } from "./bonusManager";
+import { borderWidth } from "./constants";
 
 export class Bonus {
     effect: string;
@@ -29,8 +30,8 @@ export class Bonus {
         this.activated = false;
 
         this.element.style.position = "absolute";
-        this.element.style.left = this.x + 3 - this.element.clientWidth / 2 + "px";
-        this.element.style.top = this.y + 3 - this.element.clientHeight / 2 + "px";
+        this.element.style.left = this.x + borderWidth - this.element.clientWidth / 2 + "px";
+        this.element.style.top = this.y + borderWidth - this.element.clientHeight / 2 + "px";
     }
     activate(playerEffector: Player) {
         this.activated = true;

@@ -95,8 +95,8 @@ body #Startmenu #playerSlection .player-container .keyRight {
   padding: 5px 10px;
 }
 
-html #Startmenu #playerSlection .player-container .selected,
-body #Startmenu #playerSlection .player-container .selected {
+html #Startmenu #playerSlection .player-container.selected,
+body #Startmenu #playerSlection .player-container.selected {
   opacity: .8 !important;
 }
 
@@ -292,7 +292,7 @@ body #Startmenu #sliders .checkboxContainer input[type=checkbox]:checked + label
 
 html #Startmenu #sliders .checkboxContainer input[type=checkbox] + label,
 body #Startmenu #sliders .checkboxContainer input[type=checkbox] + label {
-  background-image: url(./checkbox.png);
+  background-image: url(../checkbox.png);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -551,82 +551,82 @@ body #canvas-container .bonus {
 
 html #canvas-container .bonus.fasterSelf,
 body #canvas-container .bonus.fasterSelf {
-  background-image: url("bonus/fasterSelf.png");
+  background-image: url(../bonus/fasterSelf.png);
 }
 
 html #canvas-container .bonus.fasterElse,
 body #canvas-container .bonus.fasterElse {
-  background-image: url("bonus/fasterElse.png");
+  background-image: url(../bonus/fasterElse.png);
 }
 
 html #canvas-container .bonus.fatter,
 body #canvas-container .bonus.fatter {
-  background-image: url("bonus/fatter.png");
+  background-image: url(../bonus/fatter.png);
 }
 
 html #canvas-container .bonus.slimmer,
 body #canvas-container .bonus.slimmer {
-  background-image: url("bonus/slimmer.png");
+  background-image: url(../bonus/slimmer.png);
 }
 
 html #canvas-container .bonus.invincible,
 body #canvas-container .bonus.invincible {
-  background-image: url("bonus/invincible.png");
+  background-image: url(../bonus/invincible.png);
 }
 
 html #canvas-container .bonus.invert,
 body #canvas-container .bonus.invert {
-  background-image: url("bonus/invert.png");
+  background-image: url(../bonus/invert.png);
 }
 
 html #canvas-container .bonus.random,
 body #canvas-container .bonus.random {
-  background-image: url("bonus/random.png");
+  background-image: url(../bonus/random.png);
 }
 
 html #canvas-container .bonus.addBonus,
 body #canvas-container .bonus.addBonus {
-  background-image: url("bonus/addBonus.png");
+  background-image: url(../bonus/addBonus.png);
 }
 
 html #canvas-container .bonus.slowerElse,
 body #canvas-container .bonus.slowerElse {
-  background-image: url("bonus/slowerElse.png");
+  background-image: url(../bonus/slowerElse.png);
 }
 
 html #canvas-container .bonus.slowerSelf,
 body #canvas-container .bonus.slowerSelf {
-  background-image: url("bonus/slowerSelf.png");
+  background-image: url(../bonus/slowerSelf.png);
 }
 
 html #canvas-container .bonus.wallSelf,
 body #canvas-container .bonus.wallSelf {
-  background-image: url("bonus/wallSelf.png");
+  background-image: url(../bonus/wallSelf.png);
 }
 
 html #canvas-container .bonus.walls,
 body #canvas-container .bonus.walls {
-  background-image: url("bonus/walls.png");
+  background-image: url(../bonus/walls.png);
 }
 
 html #canvas-container .bonus.snakeSelf,
 body #canvas-container .bonus.snakeSelf {
-  background-image: url("bonus/snakeSelf.png");
+  background-image: url(../bonus/snakeSelf.png);
 }
 
 html #canvas-container .bonus.snakeElse,
 body #canvas-container .bonus.snakeElse {
-  background-image: url("bonus/snakeElse.png");
+  background-image: url(../bonus/snakeElse.png);
 }
 
 html #canvas-container .bonus.colorBlind,
 body #canvas-container .bonus.colorBlind {
-  background-image: url("bonus/colorBlind.png");
+  background-image: url(../bonus/colorBlind.png);
 }
 
 html #canvas-container .bonus.changeBg,
 body #canvas-container .bonus.changeBg {
-  background-image: url("bonus/changeBg.png");
+  background-image: url(../bonus/changeBg.png);
 }
 
 @-webkit-keyframes pulse {

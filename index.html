@@ -7,13 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Curve Fever 2010</title>
     <meta name="description" content="Curve Fever 2010 en HTML5. La meilleure version d'Achtung en fait." />
-    <meta name="robots" content="index" />
-    <link rel="stylesheet" href="style.min.css" />
+    <meta name="robots" content="index, follow" />
+    <link rel="stylesheet" href="./styles/style.min.css" />
 </head>
 
 <body>
     <section id="Startmenu">
-        <h1>Achtung Die Kurve Ultimate<sub>v1.6.1</sub></h1>
+        <h1>Achtung Die Kurve Ultimate<sub>v1.6.2</sub></h1>
         <div id="playerSlection">
             <div class="player-container" id="fred" alt="red" data-selected="false">
                 <p class="name">Fred</p>
@@ -110,6 +110,11 @@
             <p>Durée des bonus</p>
             <div class="slider" id="bonusDurationSlider"></div>
             <br/>
+            <div class="checkboxContainer" style="display: none !important;">
+                <label for="defaultSnakeMode">Mode Snake</label>
+                <input name="defaultSnakeMode" id="defaultSnakeMode" type="checkbox">
+                <label for="defaultSnakeMode" id="defaultSnakeModeLabel"></label>
+            </div>
             <div class="checkboxContainer">
                 <label for="objects">Autoriser Bonus</label>
                 <input name="objects" id="objects" type="checkbox" checked>

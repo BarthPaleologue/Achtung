@@ -3,6 +3,7 @@ import { BonusManager } from "./bonusManager.js";
 import { getRandom } from "./external/tools.js";
 import { PlayerManager } from "./playerManager.js";
 import { CanvasManager } from "./canvasManager.js";
+import { bonusBaseIterationFrequency } from "./constants.js";
 export class Achtung {
     constructor(modifiers, canvas) {
         this.fps = 60;
@@ -10,6 +11,7 @@ export class Achtung {
         this.interval = 0;
         this.running = true;
         this.gameOver = false;
+        this.defaultSnakeMode = false;
         document.querySelectorAll(".bonus, .head").forEach((elm) => elm.remove());
         document.getElementById("Startmenu").hidden = true;
         document.getElementById("pauseMenu").style.opacity = "0";
@@ -26,7 +28,7 @@ export class Achtung {
         document.getElementById("bg_calc").style.height = this.height + "px";
         // initialisation des subdivisions du jeu
         this.canvasManager = new CanvasManager(canvas, this);
-        this.canvasManager.initCells(30);
+        this.canvasManager.initCells(20);
         // initialisation des joueurs
         this.playerManager = new PlayerManager(this);
         document.querySelectorAll(".player-container").forEach((element) => {
@@ -49,8 +51,8 @@ export class Achtung {
         document.getElementById("score-container").style.width = window.innerWidth - this.canvasManager.width() - 30 + "px";
         // initialisation du clavier
         this.keyboard = {};
-        window.addEventListener('keydown', e => this.keyboard[e.keyCode || e.which] = true, true);
-        window.addEventListener('keyup', e => this.keyboard[e.keyCode || e.which] = false, true);
+        window.addEventListener('keydown', e => this.keyboard[e.keyCode] = true);
+        window.addEventListener('keyup', e => this.keyboard[e.keyCode] = false);
         document.onkeyup = e => {
             if (e.keyCode == 32 && this.running)
                 this.pause(), document.getElementById("pauseMenu").style.opacity = "1";
@@ -59,22 +61,29 @@ export class Achtung {
         };
         this.nextPlay();
     }
+    destroy() {
+        this.pause();
+        document.getElementById("victoryScreen").style.display = "none";
+        document.querySelectorAll(".bonus, .head").forEach((elm) => elm.remove());
+        this.canvasManager.clear();
+        this.bonusManager.clear();
+        document.getElementById("bg_calc").style.background = "black";
+    }
     nextPlay() {
         this.I = 0;
         this.canvasManager.clear();
         this.bonusManager.clear();
         this.playerManager.reset();
         document.getElementById("bg_calc").style.background = "black";
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++)
             this.update();
-        }
         this.pause();
     }
     update() {
         this.I += 1;
         this.playerManager.refreshScore();
         this.playerManager.aliveCounter = 0;
-        if (this.I % Math.round(400 / this.modifiers.bonusFrequency) == 0 && document.getElementById("objects").checked)
+        if (this.I % Math.round(bonusBaseIterationFrequency / this.modifiers.bonusFrequency) == 0 && document.getElementById("objects").checked)
             this.bonusManager.spawnBonus(1);
         this.playerManager.updatePlayers();
         if (this.playerManager.aliveCounter <= 1) { // fin de la manche

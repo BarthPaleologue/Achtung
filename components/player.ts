@@ -2,6 +2,7 @@ import { getRandom, squaredDistance } from "./external/tools";
 import { Cell } from "./cell";
 import { Bonus } from "./bonus";
 import { PlayerManager } from "./playerManager";
+import { playerBaseSpeed, playerBaseWidth, borderWidth } from "./constants";
 
 export class Player {
     name: string;
@@ -17,7 +18,8 @@ export class Player {
     keyRight: number;
     iniKeyLeft: number;
     iniKeyRight: number;
-    fired = false;
+    rightFired = false;
+    leftFired = false;
 
     width: number;
 
@@ -58,9 +60,9 @@ export class Player {
         this.iniKeyLeft = keyLeft;
         this.iniKeyRight = keyRight;
         
-        this.width = 3.6 * this.playerManager.modifiers.fatness;
+        this.width = playerBaseWidth * this.playerManager.modifiers.fatness;
         
-        this.speed = 1.8 * this.playerManager.modifiers.speed;
+        this.speed = playerBaseSpeed * this.playerManager.modifiers.speed;
         
         this.currentCell = new Cell(0, 0); // placeholder
 
@@ -84,12 +86,13 @@ export class Player {
         this.color = this.defaultColor;
         this.keyLeft = this.iniKeyLeft;
         this.keyRight = this.iniKeyRight;
-        this.width = 3.6 * this.playerManager.modifiers.fatness;
-        this.speed = 1.5 * this.playerManager.modifiers.speed;
+        this.width = playerBaseWidth * this.playerManager.modifiers.fatness;
+        this.speed = playerBaseSpeed * this.playerManager.modifiers.speed;
         this.alive = true;
         this.invincible = false;
         this.snakeMode = false;
-        this.fired = false;
+        this.rightFired = false;
+        this.leftFired = false;
         this.wallBreaker = false;
         this.trou = 0;
         this.lastTrou = 0;
@@ -99,25 +102,26 @@ export class Player {
             if (this.playerManager.game.keyboard[this.keyLeft]) this.angular -= this.playerManager.maniability;
             if (this.playerManager.game.keyboard[this.keyRight]) this.angular += this.playerManager.maniability;
         } else {
-            if (this.playerManager.game.keyboard[this.keyLeft] && !this.fired) {
+            if (this.playerManager.game.keyboard[this.keyLeft] && !this.leftFired) {
                 this.angular -= Math.PI / 2;
-                this.fired = true;
+                this.leftFired = true;
+                this.rightFired = false;
             }
-            if (this.playerManager.game.keyboard[this.keyRight] && !this.fired) {
+            if (this.playerManager.game.keyboard[this.keyRight] && !this.rightFired) {
                 this.angular += Math.PI / 2;
-                this.fired = true;
+                this.rightFired = true;
+                this.leftFired = false;
             }
-            if (!this.playerManager.game.keyboard[this.keyRight] && !this.playerManager.game.keyboard[this.keyLeft] && this.fired) {
-                this.fired = false;
-            }
+            if (!this.playerManager.game.keyboard[this.keyRight]) this.rightFired = false;
+            if (!this.playerManager.game.keyboard[this.keyLeft]) this.leftFired = false;
         }
     }
     move() {
         this.x += this.speed * Math.cos(this.angular);
         this.y += this.speed * Math.sin(this.angular);
 
-        this.head.style.left = this.x + 3 - this.head.clientWidth / 2 + "px"; // le +3 c'est pour la bordure
-        this.head.style.top = this.y + 3 - this.head.clientHeight / 2 + "px";
+        this.head.style.left = this.x + borderWidth - this.head.clientWidth / 2 + "px"; // le +3 c'est pour la bordure
+        this.head.style.top = this.y + borderWidth - this.head.clientHeight / 2 + "px";
         this.head.style.transform = `scale(${this.width * 2 / 10})`;
     }
 
@@ -129,12 +133,10 @@ export class Player {
     collides(): boolean {
         for (let j in this.currentCell.path) {
             let path = this.currentCell.path[j];
-            if (this.name == path.playerName && this.playerManager.game.I - path.date <= (3 * this.playerManager.modifiers.fatness * (this.width + 1)) / (this.playerManager.modifiers.speed * this.speed)) continue;
+            if (this.name == path.playerName && this.playerManager.game.I - path.date <= (3 * (this.width + 2)) / this.speed) continue;
 
             let limit = this.width + path.width;
-            if (squaredDistance(this.x, path.x, this.y, path.y) < limit ** 2) {
-                return true;
-            }
+            if (squaredDistance(this.x, path.x, this.y, path.y) < limit ** 2) return true;
         }
         return false;
     }

@@ -42,7 +42,16 @@ document.addEventListener("keydown", e => {
     if (e.keyCode == 27) { // esc
         document.getElementById("canvas-container").style.display = "none";
         document.getElementById("Startmenu").style.display = "block";
-        achtung = null;
+        if (achtung != undefined)
+            achtung === null || achtung === void 0 ? void 0 : achtung.destroy();
+    }
+});
+document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreen) {
+        document.getElementById("canvas-container").style.display = "none";
+        document.getElementById("Startmenu").style.display = "block";
+        if (achtung != undefined)
+            achtung === null || achtung === void 0 ? void 0 : achtung.destroy();
     }
 });
 // actions de la souris sur les bonus
@@ -80,7 +89,7 @@ let maniaSlider = new Slider("maniaSlider", document.getElementById("maniaSlider
 let fatSlider = new Slider("fatSlider", document.getElementById("fatSlider"), 1, 50, 10, (val) => {
     modifiers.fatness = val / 10;
 });
-let trouSlider = new Slider("trouSlider", document.getElementById("trouSlider"), 0, 200, 10, (val) => {
+let trouSlider = new Slider("trouSlider", document.getElementById("trouSlider"), 0, 100, 10, (val) => {
     modifiers.holeLength = val / 10;
 });
 let bonusSlider = new Slider("bonusSlider", document.getElementById("bonusSlider"), 1, 20, 10, (val) => {
@@ -93,7 +102,7 @@ let bonusDurationSlider = new Slider("bonusDurationSlider", document.getElementB
     modifiers.bonusDuration = val / 10;
 });
 document.getElementById("randomize").addEventListener("click", () => {
-    speedSlider.setValue(getRandomInt(5, 20));
+    speedSlider.setValue(getRandomInt(5, 15));
     maniaSlider.setValue(getRandomInt(7, 15));
     fatSlider.setValue(getRandomInt(5, 15));
     trouSlider.setValue(getRandomInt(8, 30));
@@ -110,7 +119,7 @@ document.getElementById("randomize").addEventListener("click", () => {
         }
     }
     let areBonusEnabled = document.getElementById("objects").checked;
-    if (randomBool(5) && areBonusEnabled || (randomBool(80) && !areBonusEnabled))
+    if ((randomBool(5) && areBonusEnabled) || (randomBool(80) && !areBonusEnabled))
         document.getElementById("objects").checked = !areBonusEnabled;
 });
 document.getElementById("Go").addEventListener("click", () => {

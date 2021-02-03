@@ -46,9 +46,17 @@ document.addEventListener("keydown", e => {
     if (e.keyCode == 27) { // esc
         document.getElementById("canvas-container")!.style.display = "none";
         document.getElementById("Startmenu")!.style.display = "block";
-        achtung = null;
+        if (achtung != undefined) achtung?.destroy();
     }
 });
+
+document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreen) {
+        document.getElementById("canvas-container")!.style.display = "none";
+        document.getElementById("Startmenu")!.style.display = "block";
+        if (achtung != undefined) achtung?.destroy();
+    }
+})
 
 // actions de la souris sur les bonus
 
@@ -88,7 +96,7 @@ let fatSlider = new Slider("fatSlider", document.getElementById("fatSlider")!, 1
     modifiers.fatness = val / 10;
 });
 
-let trouSlider = new Slider("trouSlider", document.getElementById("trouSlider")!, 0, 200, 10, (val: number) => {
+let trouSlider = new Slider("trouSlider", document.getElementById("trouSlider")!, 0, 100, 10, (val: number) => {
     modifiers.holeLength = val / 10;
 });
 
@@ -105,7 +113,7 @@ let bonusDurationSlider = new Slider("bonusDurationSlider", document.getElementB
 });
 
 document.getElementById("randomize")!.addEventListener("click", () => {
-    speedSlider.setValue(getRandomInt(5, 20));
+    speedSlider.setValue(getRandomInt(5, 15));
     maniaSlider.setValue(getRandomInt(7, 15));
     fatSlider.setValue(getRandomInt(5, 15));
     trouSlider.setValue(getRandomInt(8, 30));
@@ -122,7 +130,7 @@ document.getElementById("randomize")!.addEventListener("click", () => {
     }
 
     let areBonusEnabled = (<HTMLInputElement>document.getElementById("objects")).checked;
-    if (randomBool(5) && areBonusEnabled || (randomBool(80) && !areBonusEnabled)) (<HTMLInputElement>document.getElementById("objects")).checked = !areBonusEnabled;
+    if ((randomBool(5) && areBonusEnabled) || (randomBool(80) && !areBonusEnabled)) (<HTMLInputElement>document.getElementById("objects")).checked = !areBonusEnabled;
 });
 
 document.getElementById("Go")!.addEventListener("click", () => {

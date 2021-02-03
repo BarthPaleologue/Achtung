@@ -1,7 +1,8 @@
 import { Player } from "./player";
 import { Achtung } from "./achtung";
-import { randomBool, getRandomInt } from "./external/tools";
+import { randomBool } from "./external/tools";
 import { CanvasManager } from "./canvasManager";
+import { playerBaseManiability, playerBaseWidth } from "./constants";
 
 interface playerModifiers {
     speed: number,
@@ -27,7 +28,7 @@ export class PlayerManager {
             fatness: game.modifiers.fatness,
             holeLength: game.modifiers.holeLength
         }
-        this.maniability = (360 / 8500) * this.modifiers.maniability * this.modifiers.speed;
+        this.maniability = 360 * playerBaseManiability * this.modifiers.maniability * this.modifiers.speed;
         this.canvasManager = this.game.canvasManager;
     }
 
@@ -83,6 +84,12 @@ export class PlayerManager {
         this.refreshScore();
     }
 
+    refreshKeyboardState() {
+        for (let player of this.players) {
+            player.listenToKeyboard();
+        }
+    }
+
     updatePlayers() {
         for (let player of this.players) {
             if (player.alive) {
@@ -90,7 +97,7 @@ export class PlayerManager {
 
                 // apparition d'un trou
                 if (randomBool(.5 * player.lastTrou / (70 / this.modifiers.speed)) && player.lastTrou > 70 / this.modifiers.speed) {
-                    player.trou += Math.round(16 * this.modifiers.holeLength * (player.width / 3) / player.speed);
+                    player.trou += Math.max(Math.round(19 * this.modifiers.holeLength * (player.width / 3) / player.speed), Math.round(18 * this.modifiers.holeLength * (playerBaseWidth * this.modifiers.fatness / 3) / player.speed));
                     player.invincible = true;
                     player.lastTrou = 0;
                 };
@@ -111,6 +118,7 @@ export class PlayerManager {
                         if (player.y <= 0) player.y = this.canvasManager.height() - player.width / 2;
                         if (player.y >= this.game.height) player.y = player.width / 2;
                     } else if (!player.invincible) {
+                        console.log(`${player.name} s'est pris un mur.`);
                         player.die();
                         continue;
                     }
